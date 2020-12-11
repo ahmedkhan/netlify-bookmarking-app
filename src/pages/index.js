@@ -36,7 +36,7 @@ export default function Home() {
   }
   return (
     <div>
-      <p>{JSON.stringify(data)}</p>
+      
       <div>
         <input type="text" placeholder="URL" ref={node => textfield = node} />
         <input type="text" placeholder="Description" ref={node => desc = node} />
