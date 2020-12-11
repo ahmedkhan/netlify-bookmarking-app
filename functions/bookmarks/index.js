@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server-lambda')
+const { ApolloServer, gql } = require('apollo-server-lambda');
 const faunadb = require('faunadb'),
   q = faunadb.query;
 
