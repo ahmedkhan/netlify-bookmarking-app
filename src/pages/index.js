@@ -30,13 +30,13 @@ export default function Home() {
         desc: desc.value
       },
       refetchQueries: [{ query: BookMarksQuery }],
-    })
+    })    
     console.log('textfield', textfield.value)
     console.log('Desc', desc.value)
   }
   return (
     <div>
-      
+    <p>{JSON.stringify(data)}</p>
       <div>
         <input type="text" placeholder="URL" ref={node => textfield = node} />
         <input type="text" placeholder="Description" ref={node => desc = node} />

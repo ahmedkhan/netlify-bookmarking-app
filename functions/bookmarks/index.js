@@ -18,11 +18,7 @@ const typeDefs = gql`
 `
 
 
-const authors = [
-  { id: 1, url: 'https://github.com/gatsbyjs/gatsby-starter-hello-world', desc: "this is a github gatsby official repository" },
-  { id: 2, url: 'https://github.com/gatsbyjs/gatsby-starter-hello-world', desc: "this is a github gatsby official repository" },
-  { id: 3, url: 'https://github.com/gatsbyjs/gatsby-starter-hello-world', desc: "this is a github gatsby official repository" },
-]
+
  
 const resolvers = {
   Query: {
@@ -81,7 +77,16 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  playground: true,
+  introspection: true
 })
 
-exports.handler = server.createHandler()
+exports.handler = server.createHandler({
+  cors: {
+        origin: "*",
+        credentials: true,
+    },
+});
+
+
 
