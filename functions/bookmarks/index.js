@@ -14,16 +14,17 @@ const typeDefs = gql`
   }
   type Mutation {
     addBookmark(url: String!, desc: String!) : Bookmark
+    removeUrl(id:ID!) :Bookmark
   }
 `
 
 
 
- 
+
 const resolvers = {
   Query: {
     bookmark: async (root, args, context) => {
-      try{
+      try {
         var client = new faunadb.Client({ secret: "fnAD8uTQKSACBeVZaZ2dW4nfLfMOG-Tp0XFhhKjJ" });
         var result = await client.query(
           q.Map(
@@ -39,37 +40,52 @@ const resolvers = {
             desc: d.data.desc,
           }
         })
-        
+
       }
-      
-      catch(err){
-        console.log('err',err);
+
+      catch (err) {
+        console.log('err', err);
       }
     }
   },
   Mutation: {
-    addBookmark: async (_, {url,desc}) => {
+    addBookmark: async (_, { url, desc }) => {
       try {
         var client = new faunadb.Client({ secret: "fnAD8uTQKSACBeVZaZ2dW4nfLfMOG-Tp0XFhhKjJ" });
         var result = await client.query(
           q.Create(
             q.Collection('links'),
-            { data: { 
-              url,
-              desc
-             } },
+            {
+              data: {
+                url,
+                desc
+              }
+            },
           )
 
         );
         console.log("Document Created and Inserted in Container: " + result.ref.id);
         return result.ref.data
 
-      } 
-      catch (error){
-          console.log('Error: ');
-          console.log(error);
-      }    
+      }
+      catch (error) {
+        return error.toString()
+      }
+
+    },
+    removeUrl: async (_, { id }) => {
       
+      try {
+        var client = new faunadb.Client({ secret: "fnAD8uTQKSACBeVZaZ2dW4nfLfMOG-Tp0XFhhKjJ" });
+        var result = await client.query(
+          q.Delete(q.Ref(q.Collection('links'), id))
+        );
+        console.log("Document deleted in Container of Database: " + result.ref.id);            
+        
+
+      } catch (error) {
+        return error.toString()
+      }
     }
   }
 }
@@ -83,9 +99,9 @@ const server = new ApolloServer({
 
 exports.handler = server.createHandler({
   cors: {
-        origin: "*",
-        credentials: true,
-    },
+    origin: "*",
+    credentials: true,
+  },
 });
 
 
